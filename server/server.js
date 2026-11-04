@@ -58,15 +58,21 @@ app.use('/api/activity', activityRoutes);
 // Serve Frontend static assets if available (Production All-in-One deployment)
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const publicPath = path.join(__dirname, 'public');
 const clientDistPath = path.join(__dirname, '../client/dist');
+const staticPath = fs.existsSync(publicPath) ? publicPath : (fs.existsSync(clientDistPath) ? clientDistPath : null);
 
-if (fs.existsSync(clientDistPath)) {
-  app.use(express.static(clientDistPath));
+if (staticPath) {
+  app.use(express.static(staticPath));
   app.get('*', (req, res, next) => {
     if (req.path.startsWith('/api')) {
       return next();
     }
-    res.sendFile(path.join(clientDistPath, 'index.html'));
+    const indexPath = path.join(staticPath, 'index.html');
+    if (fs.existsSync(indexPath)) {
+      return res.sendFile(indexPath);
+    }
+    next();
   });
 }
 
