@@ -1,0 +1,9 @@
+{
+  "name": "review-planner",
+  "version": "1.0.0",
+  "description": "Review Planner - Keep Internal Knowledge Accurate, Current, and Review-Ready",
+  "scripts": {
+    "build": "cd client && npm install && npm run build && cd ../server && npm install",
+    "start": "cd server && npm start"
+  }
+}
